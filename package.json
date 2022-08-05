@@ -1,0 +1,36 @@
+{
+  "name": "projeto16-shortly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiagodlb/shortly-api.git"
+  },
+  "keywords": [
+    "short",
+    "shortly",
+    "small",
+    "url"
+  ],
+  "author": "Tiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiagodlb/shortly-api/issues"
+  },
+  "homepage": "https://github.com/tiagodlb/shortly-api#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "nodemon": "^2.0.19",
+    "pg": "^8.7.3"
+  }
+}
