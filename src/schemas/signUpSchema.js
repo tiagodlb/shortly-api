@@ -15,7 +15,7 @@ export const signInSchema = joi.object({
     email: joi.string().email().required(),
     password: joi
       .string()
-      .pattern(new RegExp(/[a-zA-Z0-9!@#$%^&*()\-__+.]{11,}/))
+      .pattern(new RegExp(/[a-zA-Z0-9!@#$%^&*()\-__+.]{30,}/))
       .required(),
   });
   
