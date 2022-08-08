@@ -1,10 +1,13 @@
 import connection from "../dbStrategy/postgres.js";
 import bcrypt from "bcrypt";
-import { signUpSchema } from "../schemas/signUpSchema.js";
+import { signInSchema, signUpSchema } from "../schemas/signUpSchema.js";
 
 export async function userExists(req, res, next) {
   const { email, password } = req.body;
+  const loginUser = req.body;
 
+  const validate = signInSchema.validate(loginUser);
+  if(validate.error) return res.status(422).send(validate.error.details[0].message);
   try {
     const { rows: users } = await connection.query(
       `SELECT * FROM users WHERE email = $1`,
