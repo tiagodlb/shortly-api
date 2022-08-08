@@ -1,4 +1,5 @@
 import connection from "../dbStrategy/postgres.js";
+import bcrypt from "bcrypt";
 import { signUpSchema } from "../schemas/signUpSchema.js";
 
 export async function userExists(req, res, next) {
@@ -44,18 +45,16 @@ export async function emailExists(req, res, next) {
   }
 }
 
-export async function ValidateUserExistance(req, res, next) {
-  try {
-    const userId = res.locals.userId;
+export async function ValidateLoginCompatibility(req, res, next) {
+  const login = req.body;
+  const { rows: dataFromDatabase } = await connection.query(`SELECT * FROM users WHERE email=$1`, [login.email]);
 
-    const { rows: userRows } = await connection.query(
-      `SELECT * FROM users WHERE id=$1`,
-      [userId]
-    );
-    if (!userRows[0]) return res.sendStatus(404);
+  if(!dataFromDatabase[0]) return res.sendStatus(401);
 
-    next();
-  } catch (error) {
-    return res.send("Error").status(422);
-  }
+  const userFromDatabase = dataFromDatabase[0];
+  res.locals.id = dataFromDatabase[0].id;
+
+  if(!bcrypt.compareSync(login.password, userFromDatabase.password)) return res.sendStatus(401);
+
+  next();
 }
