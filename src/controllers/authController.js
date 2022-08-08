@@ -8,7 +8,7 @@ export async function postSignUp(req, res) {
 
   const cleanEmail = stripHtml(email).result.trim();
   const cleanName = stripHtml(name).result.trim();
-  
+
   try {
     const { rows: id } = await connection.query(
       `SELECT id FROM users WHERE email=$1`,
@@ -30,23 +30,15 @@ export async function postSignUp(req, res) {
 
 export async function postSignIn(req, res) {
   const { email, password } = req.body;
+  const signedUser = res.locals.id;
+
   try {
-    const { rows: users } = await connection.query(
-      `SELECT * FROM users WHERE email=$1`,
-      [email]
+    const token = uuid();
+    await connection.query(
+      `INSERT INTO sessions (token,"userId") VALUES($1,$2)`,
+      [token, signedUser.id]
     );
-    const [user] = users;
-    if (!user) return res.sendStatus(401);
-    if (bcrypt.compareSync(password, user.password)) {
-      const token = uuid();
-      await connection.query(
-        `INSERT INTO sessions (token,"userId") VALUES($1,$2)`,
-        [token, user.id]
-      );
-      return res.send(token).status(200);
-    } else {
-      res.sendStatus(401);
-    }
+    return res.send(token).status(200);
   } catch (error) {
     return res.send("Error when you're loggin in").status(500);
   }

@@ -4,7 +4,7 @@ import connection from "../dbStrategy/postgres.js";
 
 export async function postShortUrl(req, res) {
   const { url } = req.body;
-  const { user } = res.locals;
+  const userId = res.locals.userId;
 
   const cleanUrl = url.trim();
   const shortCleanUrl = nanoid(8);
@@ -23,14 +23,14 @@ export async function postShortUrl(req, res) {
       `
             INSERT INTO urls (url, "shortUrl", "userId") VALUES ($1,$2,$3)
         `,
-      [cleanUrl, shortCleanUrl, user.id]
+      [cleanUrl, shortCleanUrl, userId]
     );
     await connection.query(
       `
         UPDATE users SET
         "linksCount" = "linksCount" + 1
         WHERE id=$1`,
-      [user.id]
+      [userId]
     );
     return res.status(201).send({ shortUrl });
   } catch (error) {
@@ -50,7 +50,7 @@ export async function getUrlId(req, res) {
 
 export async function getOpenUrl(req, res) {
   try {
-    const url = res.locals.url;
+    const bigUrl = res.locals.bigUrl;
     const id = res.locals.id;
     const newCount = res.locals.visitsCount + 1;
 
@@ -59,7 +59,7 @@ export async function getOpenUrl(req, res) {
         UPDATE urls SET "visitsCount"=$1 WHERE id=$2
         `[(newCount, id)]
     );
-    res.redirect(url);
+    res.redirect(bigUrl);
   } catch (error) {
     return res.send("Error when you're opening a url").status(500);
   }
