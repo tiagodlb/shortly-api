@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { postSignUp,postSignIn } from "../controllers/authController";
+import { postSignUp,postSignIn } from "../controllers/authController.js";
 import { userExists, emailExists, ValidateLoginCompatibility} from "../middlewares/usersMiddleware.js";
 import { ValidateSession } from "../middlewares/sessionMiddleware.js";
 
