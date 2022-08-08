@@ -40,7 +40,7 @@ export async function postShortUrl(req, res) {
 
 export async function getUrlId(req, res) {
   try {
-    const shortUrl = res.locals.shortUrl;
+    const info = res.locals.info;
 
     res.status(200).send(shortUrl);
   } catch (error) {
