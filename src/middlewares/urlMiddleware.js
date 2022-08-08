@@ -1,4 +1,5 @@
 import connection from "../dbStrategy/postgres.js";
+import { urlSchema } from "../schemas/urlSchema.js";
 
 export async function urlExists(req, res, next) {
   const { id } = req.params;
@@ -58,7 +59,7 @@ export async function ValidateShortUrl(req, res, next) {
 
 export function ValidateUrlEntrance(req, res, next) {
     const urlObject = req.body;
-    const validation = ShortenUrlSchema.validate(urlObject);
+    const validation = urlSchema.validate(urlObject);
 
     if(validation.error) {
         return res.status(422).send(validation.error.details[0].message);
