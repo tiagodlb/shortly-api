@@ -44,7 +44,7 @@ export async function emailExists(req, res, next) {
     );
     if (user[0]) return res.sendStatus(409);
     else{
-      return res.sendStatus(409)
+      return res.sendStatus(201)
     }
   } catch (error) {
     return res.send("Error").status(422);
