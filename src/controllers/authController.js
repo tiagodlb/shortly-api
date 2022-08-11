@@ -22,7 +22,7 @@ export async function postSignUp(req, res) {
       `INSERT INTO users (name,email,password) VALUES($1,$2,$3,)`,
       [cleanName, cleanEmail, passwordHash]
     );
-    res.sendStatus(201);
+    return res.sendStatus(201);
   } catch (error) {
     return res.stauts(500).send("Error posting user");
   }
